@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra/doc"
 )
 
-const DocDir = "./doc"
+const DocDir = "./docs"
 
 func main() {
 	err := os.MkdirAll(DocDir, 0666)
