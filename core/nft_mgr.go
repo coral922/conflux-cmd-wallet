@@ -19,13 +19,12 @@ import (
 )
 
 type NftMgr struct {
-	c  *Client
 	db *storage.Storage
 }
 
 type nmDep struct {
 	dig.In
-	D  *storage.Storage
+	D *storage.Storage
 }
 
 func NewNftMgr(dep nmDep) *NftMgr {
@@ -61,9 +60,9 @@ func (m *NftMgr) Register(contractAddress string) (*CRC1155Token, error) {
 		return nil, fmt.Errorf("token [%s] already exist", resp.Symbol)
 	}
 	t := CRC1155Token{
-		Address:      cfxaddress.MustNewFromBase32(contractAddress),
-		Name:         resp.Name,
-		Symbol:       resp.Symbol,
+		Address: cfxaddress.MustNewFromBase32(contractAddress),
+		Name:    resp.Name,
+		Symbol:  resp.Symbol,
 	}
 	err = m.db.SetStruct(NFTBucket, t.Symbol, &t)
 	if err != nil {
@@ -160,7 +159,7 @@ func (m *NftMgr) GetBalance(symbol string, addr types.Address) ([]*hexutil.Big, 
 	if token == nil {
 		return nil, fmt.Errorf("token [%s] not exist", symbol)
 	}
-	ctr, err := m.c.GetContract([]byte(standard.CRC1155BaseABI), &token.Address)
+	ctr, err := crawler.Contract([]byte(standard.CRC1155BaseABI), token.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +188,7 @@ func (m *NftMgr) GetBalanceOfFollowing(addr types.Address) map[string][]*hexutil
 		token := t
 		go func() {
 			defer wg.Done()
-			ctr, err := m.c.GetContract([]byte(standard.CRC1155BaseABI), &token.Address)
+			ctr, err := crawler.Contract([]byte(standard.CRC1155BaseABI), token.Address)
 			if err != nil {
 				log.Println(err)
 			}

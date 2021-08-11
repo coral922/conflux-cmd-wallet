@@ -14,7 +14,6 @@ var wallet = &cobra.Command{
 		config.MustInitConfig()
 		cmdline.MustInitWallet()
 		cmdline.MustCheckStorage()
-		cmdline.MustCheckPassword(password)
 	},
 }
 
@@ -23,6 +22,7 @@ var importKey = &cobra.Command{
 	Short: "import the private key of your account",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
 		key := args[0]
 		name := args[1]
 		cmdline.ImportAccountByPrivateKey(name, key, password)
@@ -58,6 +58,7 @@ var createAccounts = &cobra.Command{
 	Short: "create accounts",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
 		name := args[0]
 		cmdline.CreateAccounts(name, password, accountAmount)
 	},
@@ -68,6 +69,7 @@ var deleteAccount = &cobra.Command{
 	Short: "delete account",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
 		name := args[0]
 		cmdline.DeleteAccount(name, password)
 	},
@@ -78,6 +80,7 @@ var exportAccount = &cobra.Command{
 	Short: "export the private key of account",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
 		name := args[0]
 		cmdline.ExportPrivateKey(name, password)
 	},
@@ -88,6 +91,7 @@ var exportCsv = &cobra.Command{
 	Short: "export all private keys to csv file",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
 		file := args[0]
 		cmdline.ExportAllPrivateKeyToCSV(password, file)
 	},
@@ -98,6 +102,7 @@ var setDefault = &cobra.Command{
 	Short: "get or set your default account",
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
 		if len(args) == 1 {
 			cmdline.SetCurrentAccount(args[0])
 		} else {
@@ -111,6 +116,8 @@ var changeName = &cobra.Command{
 	Short: "change your account name",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
+
 		cmdline.RenameAccount(args[0], args[1])
 	},
 }
@@ -120,6 +127,8 @@ var changePw = &cobra.Command{
 	Short: "change your password",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
+
 		cmdline.ChangePassword(args[0])
 	},
 }
@@ -128,6 +137,8 @@ var resetWallet = &cobra.Command{
 	Use:   "reset",
 	Short: "reset the service (all accounts will be deleted)",
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdline.MustCheckPassword(password)
+
 		if util.SecondConfirm("this operation will delete all accounts in your wallet, are you sure?") {
 			cmdline.ResetWallet()
 		}

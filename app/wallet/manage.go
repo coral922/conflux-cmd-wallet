@@ -63,6 +63,14 @@ func (s *Service) GetBalance(symbol string, identifier string) (*hexutil.Big, er
 	return s.tm.GetBalance(symbol, *address)
 }
 
+func (s *Service) GetNftBalance(symbol string, identifier string) ([]*hexutil.Big, error) {
+	address, err := s.am.ParseStringToAddress(identifier, true)
+	if err != nil {
+		return nil, err
+	}
+	return s.nm.GetBalance(symbol, *address)
+}
+
 func (s *Service) enrichAccountsInfo(accounts []core.Account) (core.DetailedAccountList, error) {
 	var res core.DetailedAccountList
 	CRC20List, err := s.tm.SortedFollowedTokenSymbolList()

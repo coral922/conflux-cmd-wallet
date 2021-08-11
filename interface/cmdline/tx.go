@@ -15,7 +15,7 @@ import (
 func Send(token, from, to, amount, password string) {
 	b, err := walletSvc.GetBalance(token, from)
 	if err != nil {
-		log.Println("ERROR when check balance", err)
+		log.Println("ERROR when check balance: ", err)
 	}
 	bStr := util.AmountToFloatStr(b, 18)
 	fmt.Printf("Your %s Balance: %s\n", token, bStr)
@@ -33,11 +33,19 @@ func Send(token, from, to, amount, password string) {
 }
 
 func SendNft(token, tokenID, from, to, password string) {
-	rec, err := txSvc.SendNft(token, tokenID, from, to, password)
+	b, err := walletSvc.GetNftBalance(token, from)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("ERROR when check balance: ", err)
 	}
-	fmt.Println(ui.TxResultTable(rec))
+	fmt.Printf("Your %s Balance: %s\n", token, util.NftIDToStr(b))
+	fmt.Printf("You will send %s [%s] to %s \n", token, tokenID, to)
+	if util.SecondConfirm() {
+		rec, err := txSvc.SendNft(token, tokenID, from, to, password)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(ui.TxResultTable(rec))
+	}
 }
 
 func Swap(mode int, addr, input, output, amount, password string, slipTolerance int) {
@@ -82,8 +90,6 @@ func Swap(mode int, addr, input, output, amount, password string, slipTolerance 
 		tmp = append(tmp, p.Symbol)
 	}
 	fmt.Printf("Token swap path: %s\n", strings.Join(tmp, " -> "))
-
-
 
 	if util.SecondConfirm() {
 		rec, err := txSvc.DoSwap(addr, trade, password, slipTolerance)

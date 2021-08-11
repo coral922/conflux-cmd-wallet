@@ -6,7 +6,6 @@ import (
 	"cfxWorld/lib/moonswap"
 	"errors"
 	"github.com/spf13/cobra"
-	"log"
 	"strings"
 )
 
@@ -23,11 +22,7 @@ var tx = &cobra.Command{
 }
 
 var (
-	tokenTyp string
-	tokenID  string
 	from     string
-	to       string
-	amount   string
 )
 
 var sendToken = &cobra.Command{
@@ -53,14 +48,21 @@ var sendToken = &cobra.Command{
 
 var sendNft = &cobra.Command{
 	Use:   "sendnft",
-	Short: "transfer nft token",
+	Short: "transfer nft token (e.g. sendnft conDragon [your_token_id] to name:myaddr1)",
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) != 4 {
+			return errors.New("4 args expected")
+		}
+		if args[2] != "to" {
+			return errors.New("wrong syntax, except ([nft_name] [nft_token_id] to [address])")
+		}
+		if !strings.HasPrefix(args[3], "cfx:") && !strings.HasPrefix(args[3], "name:") {
+			return errors.New("wrong address syntax, except cfx:xxx OR name:xxx")
+		}
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
-		if to == "" {
-			log.Fatal("empty receiver address")
-		}
-		if tokenID == "" {
-			log.Fatal("empty nft ID")
-		}
+		tokenTyp, tokenID, to := args[0], args[1], args[3]
 		cmdline.SendNft(tokenTyp, tokenID, from, to, password)
 	},
 }
@@ -101,10 +103,5 @@ var swap = &cobra.Command{
 func init() {
 	tx.PersistentFlags().StringVar(&from, "from", "", "from which address (default your current account), "+
 		"use [name:] as prefix if you want use account name instead of address (e.g. name:myaccount1)")
-	tx.PersistentFlags().StringVar(&to, "to", "", "send to which address, "+
-		"use [name:] as prefix if you want use account name instead of address (e.g. name:myaccount1)")
-	tx.PersistentFlags().StringVarP(&amount, "amount", "a", "", "send amount. (e.g. 100)")
-	tx.PersistentFlags().StringVar(&tokenID, "nft_id", "", "the ID of your nft to transfer")
-
 	swap.Flags().IntVarP(&slip, "slippage", "s", 1, "slippage tolerance (percent) (default 1)")
 }
