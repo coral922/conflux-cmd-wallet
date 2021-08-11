@@ -21,6 +21,13 @@ jobs:
     - name: Gen Doc
       run: go generate
       if: github.event == 'push'
+      
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${secrets.GITHUB_TOKEN}
+        branch: v1.0
+        directory: ./docs
 
     - name: Build
       run: go build -v ./...
