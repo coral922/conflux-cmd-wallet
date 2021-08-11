@@ -108,6 +108,9 @@ func (s *Service) DetailedAccount(name string) (core.DetailedAccountList, error)
 	if err != nil {
 		return res, err
 	}
+	if a == nil {
+		return res, errors.New("account not exist")
+	}
 	return s.enrichAccountsInfo([]core.Account{*a})
 }
 
