@@ -1,0 +1,10 @@
+nodeURL: "http://portal-main.confluxrpc.com"
+scanURL: "https://confluxscan.io"
+client:
+  requestTimeout: "10s"
+  requestMaxRetry: 1
+  requestRetryInterval: "5s"
+wallet:
+  keyStorePath: "./keystore"
+tx:
+  maxWait: "30s"
