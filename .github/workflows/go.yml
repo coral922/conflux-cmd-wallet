@@ -1,0 +1,33 @@
+name: Go
+
+on:
+  push:
+    branches: [ v1.0 ]
+  pull_request:
+    branches: [ v1.0 ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+    
+    - name: Gen Doc
+      run: go generate
+      if: github.event == 'push'
+      
+    - name: GitHub Push
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${secrets.GITHUB_TOKEN}
+        branch: v1.0
+        directory: ./docs
+
+    - name: Build
+      run: go build -v ./...
