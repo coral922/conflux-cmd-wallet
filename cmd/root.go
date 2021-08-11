@@ -15,7 +15,7 @@ var (
 	verbose  bool
 )
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "cfxWorld",
 	Short: "Welcome to conflux world!",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
@@ -46,13 +46,13 @@ var update = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&config.ConfPath, "config", "c", "app", "config file path, default ./app.yaml")
+	RootCmd.PersistentFlags().StringVarP(&config.ConfPath, "config", "c", "app", "config file path, default ./app.yaml")
 
-	rootCmd.PersistentFlags().StringVarP(&password, "password", "p", "", "your password")
+	RootCmd.PersistentFlags().StringVarP(&password, "password", "p", "", "your password")
 
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose information")
+	RootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose information")
 
-	rootCmd.AddCommand(
+	RootCmd.AddCommand(
 		update,
 		openCfxScan,
 		info,
@@ -106,7 +106,7 @@ func init() {
 }
 
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
