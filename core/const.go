@@ -5,10 +5,6 @@ const (
 )
 
 const (
-	MainNetID = 1029
-)
-
-const (
 	PwBucket      = "_SECRET"
 	StateBucket   = "_STATE"
 	AccountBucket = "_ACCOUNT"

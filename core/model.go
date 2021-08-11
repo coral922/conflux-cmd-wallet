@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 	"github.com/Conflux-Chain/go-conflux-sdk/types"
+	"github.com/coral922/moonswap-sdk-go/constants"
 	moon "github.com/coral922/moonswap-sdk-go/entities"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"log"
@@ -78,7 +79,7 @@ type CRC20Token struct {
 }
 
 func (c *CRC20Token) MoonSwapToken() *moon.Token {
-	t, err := moon.NewToken(MainNetID, c.Address.MustGetCommonAddress(), c.Decimals, c.Symbol, c.Name)
+	t, err := moon.NewToken(constants.Mainnet, c.Address.MustGetCommonAddress(), c.Decimals, c.Symbol, c.Name)
 	if err != nil {
 		log.Println(err)
 	}
