@@ -88,6 +88,13 @@ func MustCheckPassword(pw string) {
 		}
 	}
 
+	if pw == "" {
+		var input string
+		fmt.Println("Please input your password: ")
+		_, _ = fmt.Scanln(&input)
+		pw = input
+	}
+
 	pass, err := walletSvc.CheckPassword(pw)
 	if err != nil {
 		log.Fatal(err)
