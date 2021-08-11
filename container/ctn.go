@@ -9,6 +9,7 @@ import (
 	"cfxWorld/lib/storage"
 	"go.uber.org/dig"
 	"log"
+	"os"
 )
 
 var Ctn = dig.New()
@@ -25,6 +26,10 @@ var providers = []provider{
 	{core.NewNftMgr, ""},
 	{core.NewTxMgr, ""},
 	{func() (*storage.Storage, error) {
+		err := os.MkdirAll(core.DBFolder, 0666)
+		if err != nil {
+			return nil, err
+		}
 		return storage.NewStorage(core.DBBaseFile)
 	}, ""},
 	{wallet.NewService, ""},

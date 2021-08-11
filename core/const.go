@@ -1,6 +1,7 @@
 package core
 
 const (
+	DBFolder = "./dat"
 	DBBaseFile = "./dat/base.dat"
 )
 

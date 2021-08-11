@@ -39,6 +39,7 @@ var update = &cobra.Command{
 	Short: "update crc20 and crc1155 token via data of <moonswap>",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmdline.MustInitToken()
+		cmdline.MustInitNft()
 		cmdline.SyncTokenAndPair()
 		//TODO: sync crc1155
 	},

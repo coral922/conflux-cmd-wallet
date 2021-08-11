@@ -58,13 +58,6 @@ func MustInitNft() {
 
 }
 
-func InitBuiltInToken() {
-	err := nftSvc.InitBuiltInNft()
-	if err != nil {
-		log.Println(err)
-	}
-}
-
 func MustCheckStorage() {
 	err := walletSvc.CheckStorage()
 	if err != nil {

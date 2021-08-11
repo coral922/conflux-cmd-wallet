@@ -33,9 +33,13 @@ func AddToken(address string) {
 func SyncTokenAndPair() {
 	err := tokenSvc.SyncTokenAndPairFromMoonSwap()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	fmt.Println("sync CRC20 token finished")
+	err = nftSvc.InitBuiltInNft()
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func DeleteToken(name string) {
